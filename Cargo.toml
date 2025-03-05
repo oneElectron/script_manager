@@ -1,0 +1,21 @@
+[package]
+name = "script_manager"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bitcode = "0.6.3"
+clap = { version = "4.5.26", features = ["derive", "cargo", "env"] }
+edit = "0.1.5"
+xdg = "2.5.2"
+
+
+[[bin]]
+name = "sm"
+path = "src/bin/sm/mod.rs"
+
+[profile.release]
+lto = true
+debug-assertions = false
+opt-level = 3
+build-override.codegen-units = 1
