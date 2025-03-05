@@ -16,6 +16,6 @@ You can run the script with:
 ```sh
 sm <SCRIPT NAME>
 ```
-Done :)
+Have fun :)
 
 
