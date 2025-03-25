@@ -54,7 +54,10 @@ func main() {
 		return
 	} else if options.Rename != nil {
 		for from, to := range options.Rename {
-			script_db.RenameScript(from, to)
+			err = script_db.RenameScript(from, to)
+			if err != nil {
+				fmt.Println(err.Error());
+			}
 		}
 		return
 	}

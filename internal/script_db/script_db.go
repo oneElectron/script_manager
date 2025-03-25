@@ -100,16 +100,12 @@ func RunScript(name string, args []string) error {
 		return false
 	})
 	if len(list) < 1 {
-		fmt.Printf("Script %s does not exist", name)
-		return errors.New("Script does not exist")
+		return errors.New(fmt.Sprintf("Script %s does not exist", name))
 	}
 
 	_, err = os.Stat(list[0].osPath)
-	if os.IsNotExist(err) {
-		fmt.Printf("Script %s does not exist", name)
-		return err
-	} else if err != nil {
-		return err
+	if err != nil {
+		return errors.New(fmt.Sprintf("Script %s does not exist", name))
 	}
 
 	// AI-Generated
@@ -125,7 +121,7 @@ func RunScript(name string, args []string) error {
 	return cmd.Run()
 }
 
-// / Currently can only rename scripts in local
+/// Currently can only rename scripts in local
 func RenameScript(from string, to string) error {
 	list, err := ListFiles()
 	if err != nil {
@@ -137,6 +133,10 @@ func RenameScript(from string, to string) error {
 		if item.Name == from && item.Path == "" {
 			outputlist = append(outputlist, item)
 		}
+	}
+
+	if len(outputlist) < 1 {
+		return errors.New(fmt.Sprintf("Script \"%s\" does not exist", from))
 	}
 
 	parent, _ := path.Split(outputlist[0].osPath)
