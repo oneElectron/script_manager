@@ -1,6 +1,7 @@
 package script_db
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
 	"os"
@@ -98,6 +99,18 @@ func RunScript(name string, args []string) error {
 
 		return false
 	})
+	if len(list) < 1 {
+		fmt.Printf("Script %s does not exist", name)
+		return errors.New("Script does not exist");
+	}
+
+		_, err = os.Stat(list[0].osPath)
+	if os.IsNotExist(err) {
+		fmt.Printf("Script %s does not exist", name)
+		return err
+	} else if err != nil {
+		return err
+	}
 
 	// AI-Generated
 	cmd := exec.Command(list[0].osPath)

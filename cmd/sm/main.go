@@ -66,9 +66,14 @@ func main() {
 		}
 	}
 
+	if scriptName == "" {
+		fmt.Println("No script name given")
+		return
+	}
+
 	args := slices.Delete(os.Args, 0, argsFirst)
 	err = script_db.RunScript(scriptName, args)
-	if err != nil {
+	if err != nil && err.Error() != "Script does not exist" {
 		println(err.Error())
 	}
 
