@@ -121,7 +121,7 @@ func RunScript(name string, args []string) error {
 	return cmd.Run()
 }
 
-/// Currently can only rename scripts in local
+// Currently can only rename scripts in local
 func RenameScript(from string, to string) error {
 	list, err := ListFiles()
 	if err != nil {

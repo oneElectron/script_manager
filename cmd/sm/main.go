@@ -56,7 +56,7 @@ func main() {
 		for from, to := range options.Rename {
 			err = script_db.RenameScript(from, to)
 			if err != nil {
-				fmt.Println(err.Error());
+				fmt.Println(err.Error())
 			}
 		}
 		return
@@ -97,7 +97,7 @@ type opts struct {
 	Edit   string            `short:"e" long:"edit" description:"Create/Edit a script"`
 	List   bool              `short:"l" long:"list" description:"Show list of all scripts"`
 	Help   bool              `short:"h" long:"help" description:"Show help"`
-	Rename map[string]string `long:"rename" description:"Rename a script"`
+	Rename map[string]string `long:"rename" description:"Rename a script (format: --rename oldname:newname)"`
 }
 
 func parseOptions() opts { // AI-Generated
