@@ -101,10 +101,10 @@ func RunScript(name string, args []string) error {
 	})
 	if len(list) < 1 {
 		fmt.Printf("Script %s does not exist", name)
-		return errors.New("Script does not exist");
+		return errors.New("Script does not exist")
 	}
 
-		_, err = os.Stat(list[0].osPath)
+	_, err = os.Stat(list[0].osPath)
 	if os.IsNotExist(err) {
 		fmt.Printf("Script %s does not exist", name)
 		return err
@@ -123,4 +123,24 @@ func RunScript(name string, args []string) error {
 
 	// Run the command
 	return cmd.Run()
+}
+
+// / Currently can only rename scripts in local
+func RenameScript(from string, to string) error {
+	list, err := ListFiles()
+	if err != nil {
+		return err
+	}
+
+	outputlist := make([]ScriptListItem, 0)
+	for _, item := range list {
+		if item.Name == from && item.Path == "" {
+			outputlist = append(outputlist, item)
+		}
+	}
+
+	parent, _ := path.Split(outputlist[0].osPath)
+	os.Rename(outputlist[0].osPath, path.Join(parent, to))
+
+	return nil
 }

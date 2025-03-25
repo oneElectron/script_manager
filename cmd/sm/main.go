@@ -52,6 +52,11 @@ func main() {
 	} else if options.Delete != "" {
 		os.Remove(path.Join(dirs.DataDirs[0], "script_manager", "local", options.Delete))
 		return
+	} else if options.Rename != nil {
+		for from, to := range options.Rename {
+			script_db.RenameScript(from, to)
+		}
+		return
 	}
 
 	var scriptName = ""
@@ -85,10 +90,11 @@ func main() {
 // opts defines the command line options for the CLI.
 // Fields correspond to the options in the help menu.
 type opts struct {
-	Delete string `short:"d" long:"delete" description:"Delete a script"`
-	Edit   string `short:"e" long:"edit" description:"Create/Edit a script"`
-	List   bool   `short:"l" long:"list" description:"Show list of all scripts"`
-	Help   bool   `short:"h" long:"help" description:"Show help"`
+	Delete string            `short:"d" long:"delete" description:"Delete a script"`
+	Edit   string            `short:"e" long:"edit" description:"Create/Edit a script"`
+	List   bool              `short:"l" long:"list" description:"Show list of all scripts"`
+	Help   bool              `short:"h" long:"help" description:"Show help"`
+	Rename map[string]string `long:"rename" description:"Rename a script"`
 }
 
 func parseOptions() opts { // AI-Generated
