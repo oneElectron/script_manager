@@ -1,6 +1,6 @@
 module github.com/oneElectron/script_manager
 
-go 1.24.1
+go 1.23
 
 require (
 	github.com/confluentinc/go-editor v0.11.0
