@@ -32,9 +32,9 @@ func main() {
 
 		for _, item := range list {
 			if item.Path == "" {
-				fmt.Printf("%s (local)", item.Name)
+				fmt.Printf("%s (local)\n", item.Name)
 			} else {
-				fmt.Printf("%s (%s)", item.Name, item.Path)
+				fmt.Printf("%s (%s)\n", item.Name, item.Path)
 			}
 		}
 
@@ -51,6 +51,7 @@ func main() {
 		return
 	} else if options.Delete != "" {
 		os.Remove(path.Join(dirs.DataDirs[0], "script_manager", "local", options.Delete))
+		return
 	}
 
 	var scriptName = ""
