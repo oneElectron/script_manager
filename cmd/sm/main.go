@@ -52,7 +52,7 @@ func main() {
 	} else if options.Delete != "" {
 		os.Remove(path.Join(dirs.DataDirs[0], "script_manager", "local", options.Delete))
 		return
-	} else if options.Rename != nil {
+	} else if len(options.Rename) != 0 {
 		for from, to := range options.Rename {
 			err = script_db.RenameScript(from, to)
 			if err != nil {
