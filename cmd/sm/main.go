@@ -85,8 +85,6 @@ func main() {
 	if err != nil && err.Error() != "Script does not exist" {
 		println(err.Error())
 	}
-
-	// _ := path.Join(xdg.DataHome, "script_manager")
 }
 
 // --------------------- AI Generated Snippet Start ---------------------
@@ -112,32 +110,6 @@ func parseOptions() opts { // AI-Generated
 		os.Exit(0)
 	}
 	return options
-}
-
-// runDelete deletes the specified script.
-// AI-Generated
-func runDelete(script string) {
-	// AI-Generated
-	fmt.Printf("Deleting script: %s\n", script)
-	// Add your deletion logic here.
-}
-
-// runEdit creates or edits the specified script.
-// AI-Generated
-func runEdit(script string) {
-	// AI-Generated
-	fmt.Printf("Editing/Creating script: %s\n", script)
-	// Add your edit/create logic here.
-}
-
-// runList lists all available scripts.
-// AI-Generated
-func runList() {
-	// AI-Generated
-	fmt.Println("Listing all scripts...")
-	// Example scripts list. Replace with your actual logic.
-	fmt.Println("Script1")
-	fmt.Println("Script2")
 }
 
 // --------------------- AI Generated Snippet End ---------------------
