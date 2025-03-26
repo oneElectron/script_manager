@@ -1,13 +1,22 @@
 
 # run fmt imports, the run the binary
-default *ARGS: fmt imports (run ARGS)
+default *ARGS: fmt imports (sm ARGS)
 
 # clean up, clean up, everybody everywhere
 clean: fmt imports tidy
 
 # run the debug binary
-run *ARGS:
+sm *ARGS:
     go run ./cmd/sm {{ ARGS }}
+
+install-sm *ARGS:
+    go install ./cmd/sm {{ ARGS }}
+
+smctl *ARGS:
+    go run ./cmd/smctl {{ ARGS }}
+
+install-smctl *ARGS:
+    go install ./cmd/smctl {{ ARGS }}
 
 # build the release binary
 build:

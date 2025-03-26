@@ -10,7 +10,7 @@ func arraymap[T any, U any](input []T, fn func(T) U) []U {
 	return output
 }
 
-// / Returns an array with all the elements that fn returns true
+// Returns an array with all the elements that fn returns true
 func arrayfilter[T any](input []T, fn func(T) bool) []T {
 	output := make([]T, 0)
 
