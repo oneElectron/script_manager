@@ -1,4 +1,4 @@
-package github_connection
+package smgithub
 
 import (
 	"bufio"
@@ -15,6 +15,7 @@ import (
 )
 
 const CLIENT_ID = "Iv23liEjj0fbjwLQLDY0"
+
 var SCOPES = []string{"gist"}
 
 var Client *github.Client
@@ -30,15 +31,24 @@ func UnauthenticatedLogin(httpClient *http.Client) {
 	Client = github.NewClient(httpClient)
 }
 
-func isLoggedIn(ctx context.Context) bool {
+func IsLoggedIn(ctx context.Context) bool {
 	if Client == nil {
 		return false
 	}
-	if _, _, err := Client.Users.Get(ctx, ""); err != nil {
+	if _, err := GetUsername(ctx); err != nil {
 		return false
 	}
 
 	return true
+}
+
+func GetUsername(ctx context.Context) (string, error) {
+	username, _, err := Client.Users.Get(ctx, "")
+	if err != nil {
+		return "", err
+	}
+
+	return username.GetName(), nil
 }
 
 // Shamelessly copied from GitHub's cli
@@ -52,8 +62,8 @@ func AuthFlow(isInteractive bool) string {
 	flow := &oauth.Flow{
 		Host:         host,
 		ClientID:     CLIENT_ID,
-		ClientSecret: "", // only applicable to web app flow
-		CallbackURI:  "http://127.0.0.1/callback",      // only applicable to web app flow
+		ClientSecret: "",                          // only applicable to web app flow
+		CallbackURI:  "http://127.0.0.1/callback", // only applicable to web app flow
 		Scopes:       SCOPES,
 		DisplayCode: func(code, verificationURL string) error {
 			fmt.Fprintf(w, "! First copy your one-time code: %s\n", code)
@@ -92,7 +102,6 @@ func AuthFlow(isInteractive bool) string {
 
 	return accessToken.Token
 }
-
 
 func waitForEnter(r io.Reader) error {
 	scanner := bufio.NewScanner(r)

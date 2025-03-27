@@ -1,11 +1,10 @@
-package github_connection
+package smgithub
 
 import (
 	"context"
 
 	"github.com/google/go-github/v70/github"
 )
-
 
 func ListGists(ctx context.Context) ([]*github.Gist, error) {
 	gists, _, err := Client.Gists.List(ctx, "oneElectron", &github.GistListOptions{})
@@ -20,13 +19,13 @@ func ListGists(ctx context.Context) ([]*github.Gist, error) {
 func ReadGist(ctx context.Context, gistID *string) (*github.Gist, error) {
 	gist, _, err := Client.Gists.Get(ctx, *gistID)
 	if err != nil {
-		return gist, err;
+		return gist, err
 	}
 
-	return gist, nil;
+	return gist, nil
 }
 
-func CreateGist(ctx context.Context, gistID string, description string, contents map[string]string, public bool) (*github.Gist, error) {
+func CreateGist(ctx context.Context, description string, contents map[string]string, public bool) (*github.Gist, error) {
 	gist := createGist(contents, description, public)
 
 	ogist, _, err := Client.Gists.Create(ctx, &gist)
@@ -45,8 +44,8 @@ func createGist(contents map[string]string, description string, public bool) git
 
 	gist := github.Gist{
 		Description: &description,
-		Public: &public,
-		Files: c,
+		Public:      &public,
+		Files:       c,
 	}
 
 	return gist

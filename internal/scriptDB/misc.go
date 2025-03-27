@@ -1,4 +1,11 @@
-package script_db
+package scriptDB
+
+import (
+	"io/fs"
+	"log/slog"
+	"path"
+	"strings"
+)
 
 func arraymap[T any, U any](input []T, fn func(T) U) []U {
 	output := make([]U, len(input))
@@ -66,4 +73,22 @@ func removeBefore[T comparable](array []T, elem T) []T {
 	}
 
 	return output
+}
+
+func dirEntriesToList(entries []fs.DirEntry, p string) []ScriptListItem {
+	return arraymap(entries, dirEntryToListItemMapper(p))
+}
+
+func dirEntryToListItemMapper(p string) func(fs.DirEntry) ScriptListItem {
+	return func(entry fs.DirEntry) ScriptListItem {
+		name := entry.Name()
+		newpath := remove(removeBefore(strings.Split(p, "/"), "script_manager"), 1)
+
+		slog.Info(strings.Join(newpath, "/"))
+
+		return ScriptListItem{
+			Name:   name,
+			OsPath: path.Join(p, name),
+		}
+	}
 }

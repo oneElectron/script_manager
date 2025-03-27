@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/fs"
+	"log/slog"
 	"os"
 	"path"
 	"slices"
@@ -10,11 +11,17 @@ import (
 	flags "github.com/jessevdk/go-flags"
 
 	"github.com/oneElectron/script_manager/internal/edit"
-	"github.com/oneElectron/script_manager/internal/script_db"
+	"github.com/oneElectron/script_manager/internal/scriptDB"
 	xdg "github.com/twpayne/go-xdg/v6"
 )
 
+
 func main() {
+	db, err := scriptDB.FindDatabase();
+	if err != nil {
+		slog.Error(err.Error())
+		return
+	}
 	options := parseOptions()
 
 	dirs, err := xdg.NewBaseDirectorySpecification()
@@ -24,17 +31,17 @@ func main() {
 	}
 
 	if options.List {
-		list, err := script_db.ListFiles()
+		list, err := db.ListScripts()
 		if err != nil {
 			print(err)
 			return
 		}
 
 		for _, item := range list {
-			if item.Path == "" {
+			if item.OnlinePath() == "" {
 				fmt.Printf("%s (local)\n", item.Name)
 			} else {
-				fmt.Printf("%s (%s)\n", item.Name, item.Path)
+				fmt.Printf("%s (%s)\n", item.Name, item.OnlinePath())
 			}
 		}
 
@@ -54,7 +61,7 @@ func main() {
 		return
 	} else if len(options.Rename) != 0 {
 		for from, to := range options.Rename {
-			err = script_db.RenameScript(from, to)
+			err = db.RenameScript(from, to)
 			if err != nil {
 				fmt.Println(err.Error())
 			}
@@ -81,7 +88,7 @@ func main() {
 	}
 
 	args := slices.Delete(os.Args, 0, argsFirst)
-	err = script_db.RunScript(scriptName, args)
+	err = db.RunScript(scriptName, args)
 	if err != nil && err.Error() != "Script does not exist" {
 		println(err.Error())
 	}

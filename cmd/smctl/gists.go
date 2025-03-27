@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	github "github.com/oneElectron/script_manager/internal/github_connection"
+	"github.com/oneElectron/script_manager/internal/smgithub"
 
 	"github.com/spf13/cobra"
 )
@@ -22,7 +22,7 @@ var gistsCmd = &cobra.Command{
 		}
 
 		ctx := context.Background()
-		gists, err := github.ListGists(ctx)
+		gists, err := smgithub.ListGists(ctx)
 		if err != nil {
 			println(err.Error())
 			return

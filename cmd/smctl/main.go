@@ -2,14 +2,16 @@ package main
 
 import (
 	"context"
+	"log"
 
-	"github.com/oneElectron/script_manager/internal/github_connection"
+	"github.com/oneElectron/script_manager/internal/smgithub"
 	xdg "github.com/twpayne/go-xdg/v6"
 )
 
 var DIRS *xdg.BaseDirectorySpecification
 
 func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	var err error
 
 	DIRS, err = xdg.NewBaseDirectorySpecification();
@@ -27,9 +29,9 @@ func initGithub() {
 	ctx := context.Background()
 	token := viperConf.GetString("GithubAuthToken")
 	if token == "PLACEHOLDER" {
-		github_connection.UnauthenticatedLogin(nil)
+		smgithub.UnauthenticatedLogin(nil)
 	}
-	if err := github_connection.Login(ctx, token, nil); err != nil {
-		github_connection.UnauthenticatedLogin(nil)
+	if err := smgithub.Login(ctx, token, nil); err != nil {
+		smgithub.UnauthenticatedLogin(nil)
 	}
 }

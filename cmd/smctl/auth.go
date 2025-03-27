@@ -5,7 +5,7 @@ import (
 	"path"
 
 	"github.com/mattn/go-isatty"
-	github "github.com/oneElectron/script_manager/internal/github_connection"
+	"github.com/oneElectron/script_manager/internal/smgithub"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +15,7 @@ var authCmd = &cobra.Command{
 	Short: "",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		authKey := github.AuthFlow(isatty.IsCygwinTerminal(os.Stdout.Fd()) || isatty.IsTerminal(os.Stdout.Fd()))
+		authKey := smgithub.AuthFlow(isatty.IsCygwinTerminal(os.Stdout.Fd()) || isatty.IsTerminal(os.Stdout.Fd()))
 
 		viperConf.Set("GithubAuthToken", authKey)
 		viperConf.WriteConfigAs(path.Join(DIRS.DataHome, "script_manager/sm.toml"))
