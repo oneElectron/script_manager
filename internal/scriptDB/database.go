@@ -157,3 +157,10 @@ func (self *Database) RenameScript(from string, to string) error {
 
 	return nil
 }
+
+func (self *Database) RemoveLocalScript(name string) error {
+	p := path.Join(self.LocalRoot(), name)
+
+	err := os.Remove(p)
+	return err
+}

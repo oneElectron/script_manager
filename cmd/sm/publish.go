@@ -13,7 +13,7 @@ import (
 // publishCmd represents the publish command
 var publishCmd = &cobra.Command{
 	Use:   "publish",
-	Short: "",
+	Short: "Publish a script",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		db, err := scriptDB.FindDatabase()

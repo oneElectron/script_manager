@@ -12,7 +12,7 @@ import (
 // gistsCmd represents the gists command
 var gistsCmd = &cobra.Command{
 	Use:   "gists",
-	Short: "",
+	Short: "List your gists",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		initGithub()
@@ -34,7 +34,7 @@ var gistsCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(gistsCmd)
+	// rootCmd.AddCommand(gistsCmd)
 
 	// Here you will define your flags and configuration settings.
 

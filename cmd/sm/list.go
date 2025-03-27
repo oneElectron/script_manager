@@ -1,25 +1,18 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package main
 
 import (
-	"io/fs"
+	"fmt"
 	"log/slog"
-	"os"
-	"path"
 
-	"github.com/oneElectron/script_manager/internal/edit"
 	"github.com/oneElectron/script_manager/internal/scriptDB"
 	"github.com/spf13/cobra"
 )
 
-// editCmd represents the edit command
-var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "Edit a script",
+// listCmd represents the list command
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List your scripts",
 	Long: ``,
-
 	Run: func(cmd *cobra.Command, args []string) {
 		db, err := scriptDB.FindDatabase()
 		if err != nil {
@@ -27,25 +20,32 @@ var editCmd = &cobra.Command{
 			return
 		}
 
-		err = os.Mkdir(path.Join(db.LocalRoot()), fs.ModeDir|0o755)
-
-		err = edit.Editor(path.Join(db.LocalRoot(), args[0]))
+		list, err := db.ListScripts()
 		if err != nil {
-			print(err.Error())
+			print(err)
+			return
+		}
+
+		for _, item := range list {
+			if item.OnlinePath() == "" {
+				fmt.Printf("%s (local)\n", item.Name)
+			} else {
+				fmt.Printf("%s (%s)\n", item.Name, item.OnlinePath())
+			}
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(editCmd)
+	rootCmd.AddCommand(listCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// editCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// editCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

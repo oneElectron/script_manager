@@ -5,6 +5,8 @@ default *ARGS: fmt imports (sm ARGS)
 # clean up, clean up, everybody everywhere
 clean: fmt imports tidy
 
+install *ARGS: (install-s ARGS) (install-sm ARGS)
+
 # run the debug binary
 s *ARGS:
     go run ./cmd/s {{ ARGS }}

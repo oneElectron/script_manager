@@ -12,7 +12,7 @@ import (
 // authCmd represents the auth command
 var authCmd = &cobra.Command{
 	Use:   "auth",
-	Short: "",
+	Short: "Authenticate with GitHub",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		authKey := smgithub.AuthFlow(isatty.IsCygwinTerminal(os.Stdout.Fd()) || isatty.IsTerminal(os.Stdout.Fd()))

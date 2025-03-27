@@ -12,7 +12,7 @@ import (
 // publishCmd represents the publish command
 var unpublishCmd = &cobra.Command{
 	Use:   "unpublish",
-	Short: "",
+	Short: "Unpublish a script",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.Background()
