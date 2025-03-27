@@ -1,9 +1,9 @@
 package scriptDB
 
 import (
-	"path"
-	"os"
 	"log/slog"
+	"os"
+	"path"
 )
 
 func (self *Database) ListScripts() ([]ScriptListItem, error) {
@@ -122,7 +122,7 @@ func getAllSubChildrenEntries(paths []string) ([]ScriptListItem, error) {
 
 		rootedEntries := arraymap(entries, func(e os.DirEntry) ScriptListItem {
 			return ScriptListItem{
-				Name: e.Name(),
+				Name:   e.Name(),
 				OsPath: p,
 			}
 		})

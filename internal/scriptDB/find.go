@@ -1,11 +1,11 @@
 package scriptDB
 
 import (
-	"path"
 	"errors"
 	"log/slog"
-	"slices"
 	"os"
+	"path"
+	"slices"
 )
 
 func (self *Database) GetOnlineScript(service string, user string, name string) (string, error) {
@@ -78,7 +78,7 @@ func (self *Database) FindLocalScript(name string) (*ScriptListItem, error) {
 	}
 
 	return &ScriptListItem{
-		Name: name,
+		Name:   name,
 		OsPath: p,
 	}, nil
 }

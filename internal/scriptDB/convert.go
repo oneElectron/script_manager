@@ -1,9 +1,9 @@
 package scriptDB
 
-import(
+import (
 	"errors"
-	"os"
 	"log/slog"
+	"os"
 )
 
 func (self *Database) ConvertLocalToOnline(name string, service string, user string) error {

@@ -15,9 +15,8 @@ import (
 	xdg "github.com/twpayne/go-xdg/v6"
 )
 
-
 func main() {
-	db, err := scriptDB.FindDatabase();
+	db, err := scriptDB.FindDatabase()
 	if err != nil {
 		slog.Error(err.Error())
 		return
