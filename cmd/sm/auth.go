@@ -17,7 +17,9 @@ var authCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		authKey := smgithub.AuthFlow(isatty.IsCygwinTerminal(os.Stdout.Fd()) || isatty.IsTerminal(os.Stdout.Fd()))
 
-		viperConf.Set("GithubAuthToken", authKey)
+		viperConf.Set("GithubAuthToken", authKey.AuthKey)
+		viperConf.Set("GithubUsername", authKey.Username)
+
 		viperConf.WriteConfigAs(path.Join(DIRS.DataHome, "script_manager/sm.toml"))
 	},
 }

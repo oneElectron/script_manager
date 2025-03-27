@@ -48,8 +48,13 @@ func GetUsername(ctx context.Context) (string, error) {
 	return username.GetName(), nil
 }
 
+type UserInfo struct {
+	AuthKey string;
+	Username string;
+}
+
 // Shamelessly copied from GitHub's cli
-func AuthFlow(isInteractive bool) string {
+func AuthFlow(isInteractive bool) UserInfo {
 	w := os.Stderr
 
 	host, err := oauth.NewGitHubHost("https://github.com")
@@ -97,7 +102,14 @@ func AuthFlow(isInteractive bool) string {
 		panic(err)
 	}
 
-	return accessToken.Token
+	ctx := context.Background()
+
+	username, _, err := github.NewClient(nil).WithAuthToken(accessToken.Token).Users.Get(ctx, "")
+
+	return UserInfo{
+		AuthKey: accessToken.Token,
+		Username: *username.Name,
+	}
 }
 
 func waitForEnter(r io.Reader) error {
