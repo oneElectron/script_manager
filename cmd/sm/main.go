@@ -30,7 +30,6 @@ func initGithub() {
 	if token == "PLACEHOLDER" {
 		smgithub.UnauthenticatedLogin(nil)
 	}
-	if err := smgithub.Login(ctx, token, nil); err != nil {
-		smgithub.UnauthenticatedLogin(nil)
-	}
+
+	smgithub.Login(ctx, token, nil)
 }

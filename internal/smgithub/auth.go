@@ -20,11 +20,8 @@ var SCOPES = []string{"gist"}
 
 var Client *github.Client
 
-func Login(ctx context.Context, token string, httpClient *http.Client) error {
+func Login(ctx context.Context, token string, httpClient *http.Client) {
 	Client = github.NewClient(httpClient).WithAuthToken(token)
-	_, _, err := Client.Users.Get(ctx, "")
-
-	return err
 }
 
 func UnauthenticatedLogin(httpClient *http.Client) {
