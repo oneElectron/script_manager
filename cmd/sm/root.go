@@ -8,7 +8,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "smctl",
+	Use:   "sm",
 	Short: "Script Manager allows you to easily create, manage, run, and share your scripts",
 	Long: ``,
 	// Uncomment the following line if your bare application

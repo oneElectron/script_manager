@@ -15,13 +15,10 @@ var gistsCmd = &cobra.Command{
 	Short: "",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		authKey := viperConf.GetString("GithubAuthToken")
-		if authKey == "PLACEHOLDER" {
-			println("You are not authenticated, please run smctl auth")
-			return
-		}
+		initGithub()
 
 		ctx := context.Background()
+
 		gists, err := smgithub.ListGists(ctx)
 		if err != nil {
 			println(err.Error())

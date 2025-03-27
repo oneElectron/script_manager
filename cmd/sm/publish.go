@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log/slog"
+	"os"
 
 	"github.com/oneElectron/script_manager/internal/scriptDB"
 	"github.com/oneElectron/script_manager/internal/smgithub"
@@ -10,51 +11,53 @@ import (
 )
 
 // publishCmd represents the publish command
-var unpublishCmd = &cobra.Command{
-	Use:   "unpublish",
+var publishCmd = &cobra.Command{
+	Use:   "publish",
 	Short: "",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx := context.Background()
-		initGithub()
 		db, err := scriptDB.FindDatabase()
 		if err != nil {
 			slog.Error(err.Error())
 			return
 		}
 
-		name := args[0]
+		initGithub()
 
-		list, err := smgithub.ListGists(ctx)
+		ctx := context.Background()
+
+		public, err := cmd.Flags().GetBool("public")
 		if err != nil {
-			println(err.Error())
-			return
-		}
-
-		found := false
-		for _, item := range list {
-			if *item.Description == name + ".sm" {
-				found = true
-				break
-			}
-		}
-
-		if !found {
+			slog.Error(err.Error())
 			return
 		}
 
 		user, err := smgithub.GetUsername(ctx)
 		if err != nil {
-			println(err.Error())
+			slog.Error(err.Error())
 			return
 		}
 
-		db.ConvertOnlineToLocal("github.com", user, name)
+		name := args[0]
+		script, err := db.FindLocalScript(name)
+
+		desc := name + ".sm"
+		contents, err := os.ReadFile(script.OsPath)
+
+		if err != nil {
+			slog.Error(err.Error())
+			return
+		}
+
+		cmap := map[string]string{name:string(contents)}
+
+		smgithub.CreateGist(ctx, desc , cmap,  public)
+		db.ConvertLocalToOnline(name, "github.com", user)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(unpublishCmd)
+	rootCmd.AddCommand(publishCmd)
 
 	// Here you will define your flags and configuration settings.
 
@@ -64,5 +67,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// publishCmd.Flags().BoolP("public", "p", false, "Make the gist public")
+	publishCmd.Flags().BoolP("public", "p", false, "Make the gist public")
 }
