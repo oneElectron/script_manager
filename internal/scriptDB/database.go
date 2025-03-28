@@ -38,7 +38,6 @@ func (self *Database) OnlineRoot() string {
 
 func (self *Database) createOnlineScript(service string, user string, name string, contents []byte) error {
 	p := path.Join(self.root, "online", service, user, name)
-	slog.Info(p)
 
 	err := os.MkdirAll(p, 0o755)
 	if err != nil {

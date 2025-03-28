@@ -2,9 +2,7 @@ package scriptDB
 
 import (
 	"io/fs"
-	"log/slog"
 	"path"
-	"strings"
 )
 
 func arraymap[T any, U any](input []T, fn func(T) U) []U {
@@ -82,9 +80,6 @@ func dirEntriesToList(entries []fs.DirEntry, p string) []ScriptListItem {
 func dirEntryToListItemMapper(p string) func(fs.DirEntry) ScriptListItem {
 	return func(entry fs.DirEntry) ScriptListItem {
 		name := entry.Name()
-		newpath := remove(removeBefore(strings.Split(p, "/"), "script_manager"), 1)
-
-		slog.Info(strings.Join(newpath, "/"))
 
 		return ScriptListItem{
 			Name:   name,
