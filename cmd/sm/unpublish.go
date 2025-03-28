@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/google/go-github/v70/github"
 	"github.com/oneElectron/script_manager/internal/scriptDB"
 	"github.com/oneElectron/script_manager/internal/smgithub"
 	"github.com/spf13/cobra"
@@ -33,23 +34,26 @@ var unpublishCmd = &cobra.Command{
 			return
 		}
 
-		found := false
+		var gist *github.Gist = nil
 		for _, item := range list {
 			if *item.Description == name + ".sm" {
-				found = true
+				gist = item
 				break
 			}
 		}
 
-		if !found {
+		if gist == nil {
 			return
 		}
+
 
 		user, err := smgithub.GetUsername(ctx)
 		if err != nil {
 			println(err.Error())
 			return
 		}
+
+		smgithub.RemoveGist(ctx, *gist.ID)
 
 		db.ConvertOnlineToLocal("github.com", user, name)
 	},

@@ -37,7 +37,7 @@ func (self *Database) OnlineRoot() string {
 }
 
 func (self *Database) createOnlineScript(service string, user string, name string, contents []byte) error {
-	p := path.Join(self.root, "online", service, user, name)
+	p := path.Join(self.root, "online", service, user)
 
 	err := os.MkdirAll(p, 0o755)
 	if err != nil {
@@ -45,16 +45,21 @@ func (self *Database) createOnlineScript(service string, user string, name strin
 		return err
 	}
 
-	os.WriteFile(p, contents, 0o755)
+	slog.Info("Creating file: " + p)
+	err = os.WriteFile(path.Join(p, name), contents, 0o755)
+	if err != nil {
+		slog.Error(err.Error())
+		return err
+	}
 
 	return nil
 }
 
 func (self *Database) createLocalScript(name string, contents []byte) error {
-	p := path.Join(self.root, "local", name)
+	p := path.Join(self.LocalRoot(), name)
 	slog.Info(p)
 
-	err := os.MkdirAll(p, 0o755)
+	err := os.MkdirAll(self.LocalRoot(), 0o755)
 	if err != nil {
 		slog.Error(err.Error())
 		return err
@@ -91,7 +96,14 @@ type ScriptListItem struct {
 }
 
 func (self *ScriptListItem) OnlinePath() string {
-	return strings.Join(removeBefore(strings.Split(self.OsPath, "/"), "script_manager"), "")
+	removedPrefix := removeBefore(strings.Split(self.OsPath, "/"), "script_manager")
+	removedType := remove(removedPrefix, 1)
+	removedName := removedType[:len(removedType)-1]
+
+	return strings.Join(
+		removedName,
+		"/",
+	)
 }
 
 func (self ScriptListItem) String() string {
@@ -161,5 +173,8 @@ func (self *Database) RemoveLocalScript(name string) error {
 	p := path.Join(self.LocalRoot(), name)
 
 	err := os.Remove(p)
+	if err != nil {
+		slog.Error(err.Error())
+	}
 	return err
 }

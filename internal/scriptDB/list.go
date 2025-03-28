@@ -123,7 +123,7 @@ func getAllSubChildrenEntries(paths []string) ([]ScriptListItem, error) {
 		rootedEntries := arraymap(entries, func(e os.DirEntry) ScriptListItem {
 			return ScriptListItem{
 				Name:   e.Name(),
-				OsPath: p,
+				OsPath: path.Join(p, e.Name()),
 			}
 		})
 

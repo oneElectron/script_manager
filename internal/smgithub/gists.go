@@ -2,6 +2,7 @@ package smgithub
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/google/go-github/v70/github"
 )
@@ -49,6 +50,15 @@ func createGist(contents map[string]string, description string, public bool) git
 	}
 
 	return gist
+}
+
+func RemoveGist(ctx context.Context, gistID string) error {
+	_, err := Client.Gists.Delete(ctx, gistID)
+	if err != nil {
+		slog.Error(err.Error())
+		return err
+	}
+	return nil
 }
 
 func EditGist(ctx context.Context, gistID string, contents map[string]string, description string, public bool) (*github.Gist, error) {
